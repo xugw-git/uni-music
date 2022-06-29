@@ -4,6 +4,12 @@
 		"style": {
 			"navigationBarTitleText": "网易云音乐"
 		}
+	}, {
+		"path": "pages/list/list",
+		"style": {
+			"navigationBarTitleText": "歌单"
+		}
+
 	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

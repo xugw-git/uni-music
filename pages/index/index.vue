@@ -3,8 +3,7 @@
 		<scroll-view scroll-y="true">
 			<uni-search-bar placeholder="搜索歌曲" :radius="100" @confirm="search"></uni-search-bar>
 			<view class="index-list">
-				<view class="index-list-item" v-for="item in topList" :key="item.id" @tap="tapToList"
-					:data-id="item.id">
+				<view class="index-list-item" v-for="item in topList" :key="item.id" @tap="tapToList(item.id)">
 					<view class="index-list-img">
 						<image :src="item.coverImgUrl"></image>
 						<text>{{ item.updateFrequency }}</text>
@@ -21,9 +20,7 @@
 </template>
 
 <script>
-import {
-	topList
-} from '../../api/api.js'
+import { topList } from '../../api/api.js'
 export default {
 	data() {
 		return {
@@ -40,9 +37,9 @@ export default {
 		})
 	},
 	methods: {
-		tapToList(event) {
+		tapToList(id) {
 			uni.navigateTo({
-				url: '../list/list?listId=' + event.currentTarget.dataset.id
+				url: '../list/list?listId=' + id
 			})
 		},
 	},

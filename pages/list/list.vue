@@ -18,27 +18,27 @@
 					</view>
 				</view>
 				<button class="list-share" open-type="share">
-					<uni-icons type="redo" size="20" color="white"> </uni-icons>
+					<u-icon name="share-square" size="20" color="#fff"></u-icon>
 					分享给微信好友
 				</button>
 				<view class="list-music">
 					<view class="list-music-title">
-						<uni-icons type="list" size="20" color="#999"></uni-icons>
-						<text>播放全部</text>
+						<u-icon name="list-dot" size="20" color="#000"></u-icon>
+						<text>歌单列表</text>
 						<text>(共{{ playlist.trackCount }}首)</text>
 					</view>
-					<view class="list-music-item" v-for="(item, index) in playlist.tracks" :key="item.id"
+					<view class="list-music-item" v-for="(item, index) in playlist.tracks" :key="index"
 						@tap="tapToDetail(item.id)">
 						<view class="list-music-top">{{ index + 1 }}</view>
 						<view class="list-music-song">
 							<view>{{ item.name }}</view>
 							<view>
-								<image v-if="privileges[index].maxbr == 999000" src="../../static/sq.png" mode="">
+								<image v-if="privileges[index].maxbr == 999000" src="../../static/sq.png">
 								</image>
 								{{ item.ar[0].name }} - {{ item.name }}
 							</view>
 						</view>
-						<uni-icons type="headphones" size="20" color="#999"></uni-icons>
+						<u-icon name="play-circle" size="25" color="#999"></u-icon>
 					</view>
 				</view>
 			</scroll-view>
@@ -78,7 +78,13 @@ export default {
 				url: '/pages/detail/detail?songId=' + id
 			});
 		}
-	}
+	},
+	onShareAppMessage() {
+		return {
+			title: `分享榜单：${this.playlist.name}`,
+			path: '/pages/list/list',
+		}
+	},
 }
 </script>
 
@@ -166,13 +172,10 @@ export default {
 }
 
 .list-music-title {
+	display: flex;
 	height: 58rpx;
 	line-height: 58rpx;
 	margin: 30rpx 30rpx 70rpx 30rpx;
-}
-
-.list-music-title text:nth-child(1) {
-	font-size: 58rpx;
 }
 
 .list-music-title text:nth-child(2) {
@@ -223,10 +226,5 @@ export default {
 	width: 34rpx;
 	height: 22rpx;
 	margin-right: 10rpx;
-}
-
-.list-music-item text {
-	font-size: 50rpx;
-	color: #c8c8c8;
 }
 </style>

@@ -5,7 +5,9 @@
 			<scroll-view scroll-y="true">
 				<view class="detail-play" @tap="handleToPlay">
 					<image :src="songDetail.al.picUrl" :class="{ 'detail-play-run': isplayrotate }"></image>
-					<uni-icons :type="iconType" size="60" color="#FFF"></uni-icons>
+					<view class="play-icon">
+						<u-icon :name="iconType" size="60" color="#FFF"></u-icon>
+					</view>
 				</view>
 				<view class="detail-lyric">
 					<view class="detail-lyric-wrap"
@@ -29,7 +31,7 @@
 									{{ item.artists[0].name }} - {{ item.name }}
 								</view>
 							</view>
-							<uni-icons type="headphones" size="20" color="#999"></uni-icons>
+							<u-icon name="play-circle" size="20" color="#999"></u-icon>
 						</view>
 					</view>
 				</view>
@@ -47,7 +49,7 @@
 								</view>
 								<view class="detail-comment-like">
 									{{ item.likedCount }}
-									<uni-icons type="headphones" size="16" color="#999"></uni-icons>
+									<u-icon name="thumb-up" size="16" color="#999"></u-icon>
 								</view>
 							</view>
 							<view class="detail-comment-text">
@@ -66,6 +68,7 @@ import { songDetail, songUrl, songLyric, songSimi, songComment } from '../../api
 export default {
 	data() {
 		return {
+			currentId: '',
 			songDetail: {
 				al: {
 					picUrl: ''
@@ -76,10 +79,11 @@ export default {
 			songLyric: [],
 			lyricIndex: 0,
 			isplayrotate: true,
-			iconType: "headphones"
+			iconType: "pause-circle"
 		}
 	},
 	onLoad(options) {
+		this.currentId=options.songId
 		this.playMusic(options.songId);
 	},
 	onUnload() {
@@ -94,17 +98,15 @@ export default {
 		this.bgAudioMannager.destroy();
 		// #endif
 	},
-	onReady() {
-		uni.setNavigationBarTitle({
-			title: '新的标题'
-		});
-	},
 	methods: {
 		playMusic(songId) {
 			Promise.all([songDetail(songId), songSimi(songId), songComment(songId), songLyric(songId), songUrl(
 				songId)]).then((res) => {
 					if (res[0][1].data.code == '200') {
 						this.songDetail = res[0][1].data.songs[0];
+						uni.setNavigationBarTitle({
+							title: this.songDetail.name
+						});
 					}
 					if (res[1][1].data.code == '200') {
 						this.songSimi = res[1][1].data.songs;
@@ -125,21 +127,22 @@ export default {
 						this.songLyric = result;
 					}
 					if (res[4][1].data.code == '200') {
+						this.listenLyricIndex();
 						this.bgAudioMannager = uni.getBackgroundAudioManager();
 						this.bgAudioMannager.title = this.songDetail.name;
 						this.bgAudioMannager.src = res[4][1].data.data[0].url;
-						this.listenLyricIndex();
 						this.bgAudioMannager.onPlay(() => {
-							this.iconType = 'headphones';
+							this.iconType = 'pause-circle';
 							this.isplayrotate = true;
 							this.listenLyricIndex();
 						});
 						this.bgAudioMannager.onPause(() => {
-							this.iconType = 'locked';
+							this.iconType = 'play-circle';
 							this.isplayrotate = false;
 							this.cancelLyricIndex();
 						});
 						this.bgAudioMannager.onEnded(() => {
+							this.playMusic(this.currentId)
 						});
 					}
 				});
@@ -174,15 +177,23 @@ export default {
 			clearInterval(this.timer);
 		},
 		handleToSimi(songId) {
+			this.currentId=songId
 			this.playMusic(songId);
 		}
-	}
+	},
+	onShareAppMessage() {
+		this.bgAudioMannager.pause();
+		return {
+			title: `分享音乐：${this.songDetail.name}`,
+			path: '/pages/detail/detail',
+		}
+	},
 }
 </script>
 
 <style scoped>
 .detail {
-	background: rgba(0, 0, 0, 0.5);
+	background: rgba(0, 0, 0, 0.6);
 }
 
 .detail-play {
@@ -190,7 +201,7 @@ export default {
 	height: 580rpx;
 	background: url(~@/static/disc.png);
 	background-size: cover;
-	margin: 210rpx auto 44rpx auto;
+	margin: 100rpx auto;
 	position: relative;
 }
 
@@ -222,16 +233,10 @@ export default {
 	animation-play-state: running;
 }
 
-.detail-play uni-icons {
-	width: 100rpx;
-	height: 100rpx;
-	font-size: 100rpx;
-	position: absolute;
-	left: 0;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	margin: auto;
+.play-icon {
+	display: flex;
+	justify-content: center;
+	padding-top: 230rpx;
 }
 
 .detail-lyric {
@@ -256,7 +261,7 @@ export default {
 }
 
 .detail-like {
-	margin: 0 32rpx;
+	margin: 100rpx 32rpx 0 32rpx;
 }
 
 .detail-like-title {
@@ -361,7 +366,7 @@ export default {
 }
 
 .detail-comment-name view:nth-child(2) {
-	font-size: 20rpx;
+	font-size: 16rpx;
 }
 
 .detail-comment-like {

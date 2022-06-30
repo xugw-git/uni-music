@@ -1,7 +1,9 @@
 <template>
 	<view class="index">
 		<scroll-view scroll-y="true">
-			<uni-search-bar placeholder="搜索歌曲" :radius="100" @confirm="search"></uni-search-bar>
+			<view class="search-area">
+			<u-search placeholder="搜索歌曲" :showAction="false"></u-search>
+			</view>
 			<view class="index-list">
 				<view class="index-list-item" v-for="item in topList" :key="item.id" @tap="tapToList(item.id)">
 					<view class="index-list-img">
@@ -45,19 +47,17 @@ export default {
 	},
 	onShareAppMessage() {
 		return {
-			title: 'xugwMusic - 网易云音乐',
+			title: '分享小程序：xugw-music',
 			path: '/pages/index/index',
-		}
-	},
-	onShareTimeline() {
-		return {
-			title: 'xugwMusic - 网易云音乐',
 		}
 	}
 }
 </script>
 
 <style>
+.search-area{
+	margin: 30rpx;	
+}
 .index-list {
 	margin: 0 30rpx;
 }

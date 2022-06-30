@@ -21,6 +21,9 @@ const app = new Vue({
 app.$mount()
 // #endif
 
+import uView from '@/uni_modules/uview-ui'
+Vue.use(uView)
+
 // #ifdef VUE3
 import { createSSRApp } from 'vue'
 import App from './App.vue'

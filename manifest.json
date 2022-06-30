@@ -52,7 +52,8 @@
             "es6" : true
         },
         "usingComponents" : true,
-        "lazyCodeLoading" : "requiredComponents"
+        "lazyCodeLoading" : "requiredComponents",
+		"requiredBackgroundModes": ["audio"]
     },
     "vueVersion" : "2"
 }

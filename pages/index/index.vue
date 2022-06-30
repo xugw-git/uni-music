@@ -2,7 +2,7 @@
 	<view class="index">
 		<scroll-view scroll-y="true">
 			<view class="search-area">
-			<u-search placeholder="搜索歌曲" :showAction="false"></u-search>
+				<u-search placeholder="搜索歌曲" :showAction="false" @tap="tapToSearch"></u-search>
 			</view>
 			<view class="index-list">
 				<view class="index-list-item" v-for="item in topList" :key="item.id" @tap="tapToList(item.id)">
@@ -32,9 +32,7 @@ export default {
 	onLoad() {
 		topList().then(res => {
 			if (res.length) {
-				setTimeout(() => {
-					this.topList = res;
-				}, 1000)
+				this.topList = res
 			}
 		})
 	},
@@ -44,6 +42,11 @@ export default {
 				url: '../list/list?listId=' + id
 			})
 		},
+		tapToSearch() {
+			uni.navigateTo({
+				url: '/pages/search/search'
+			});
+		}
 	},
 	onShareAppMessage() {
 		return {
@@ -55,9 +58,10 @@ export default {
 </script>
 
 <style>
-.search-area{
-	margin: 30rpx;	
+.search-area {
+	margin: 30rpx;
 }
+
 .index-list {
 	margin: 0 30rpx;
 }

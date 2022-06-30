@@ -1,14 +1,24 @@
 {
-	"pages": [{
-		"path": "pages/index/index"
-	}, {
-		"path": "pages/list/list",
-		"style": {
-			"navigationBarTitleText": "歌单"
+	"pages": [
+		{
+			"path": "pages/index/index"
+		},
+		{
+			"path": "pages/list/list",
+			"style": {
+				"navigationBarTitleText": "歌单"
+			}
+		},
+		{
+			"path": "pages/detail/detail"
+		},
+		{
+			"path": "pages/search/search",
+			"style": {
+				"navigationBarTitleText": "搜索"
+			}
 		}
-	}, {
-		"path": "pages/detail/detail"
-	}],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "网易云音乐",

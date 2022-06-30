@@ -83,7 +83,7 @@ export default {
 		}
 	},
 	onLoad(options) {
-		this.currentId=options.songId
+		this.currentId = options.songId
 		this.playMusic(options.songId);
 	},
 	onUnload() {
@@ -177,7 +177,7 @@ export default {
 			clearInterval(this.timer);
 		},
 		handleToSimi(songId) {
-			this.currentId=songId
+			this.currentId = songId
 			this.playMusic(songId);
 		}
 	},
@@ -193,7 +193,7 @@ export default {
 
 <style scoped>
 .detail {
-	background: rgba(0, 0, 0, 0.6);
+	background: rgba(0, 0, 0, 0.7);
 }
 
 .detail-play {
@@ -370,6 +370,8 @@ export default {
 }
 
 .detail-comment-like {
+	display: flex;
+	align-items: center;
 	font-size: 24rpx;
 }
 

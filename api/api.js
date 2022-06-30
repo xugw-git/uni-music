@@ -1,4 +1,3 @@
-// const baseUrl="https://www.codeman.ink/api/"
 const baseUrl="http://localhost:3000/"
 
 /**

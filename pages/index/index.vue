@@ -30,9 +30,14 @@ export default {
 		}
 	},
 	onLoad() {
-		topList().then(res => {
+		topList().then((res) => {
 			if (res.length) {
 				this.topList = res
+			}
+			else {
+				uni.reLaunch({
+					url: "/pages/index/index"
+				});
 			}
 		})
 	},
@@ -62,22 +67,17 @@ export default {
 	margin: 30rpx;
 }
 
-.index-list {
-	margin: 0 30rpx;
-}
-
 .index-list-item {
-	display: flex;
-	margin-bottom: 34rpx;
+	margin-left: 30rpx;
+	margin-bottom: 45rpx;
 }
 
 .index-list-img {
 	width: 212rpx;
 	height: 212rpx;
-	position: relative;
+	position: absolute;
 	border-radius: 10rpx;
 	overflow: hidden;
-	margin-right: 22rpx;
 }
 
 .index-list-img image {
@@ -91,10 +91,11 @@ export default {
 	bottom: 16rpx;
 	color: white;
 	font-size: 20rpx;
-
 }
 
 .index-list-text {
+	margin-left: 232rpx;
+	margin-right: 30rpx;
 	font-size: 24rpx;
 	line-height: 66rpx;
 	white-space: nowrap;

@@ -65,9 +65,9 @@ export default {
 		})
 		let listId = options.listId;
 		list(listId).then((res) => {
-			if (res[1].data.code == '200') {
-				this.playlist = res[1].data.playlist;
-				this.privileges = res[1].data.privileges;
+			if (res.data.code == '200') {
+				this.playlist = res.data.playlist;
+				this.privileges = res.data.privileges;
 				uni.hideLoading();
 			}
 		});

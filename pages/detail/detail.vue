@@ -87,35 +87,32 @@ export default {
 		this.playMusic(options.songId);
 	},
 	onUnload() {
-		this.cancelLyricIndex();
-		// #ifdef H5
-		this.bgAudioMannager.destroy();
-		// #endif
+		this.cancelLyricIndex()
+	},
+	onShow() {
+		this.listenLyricIndex()
 	},
 	onHide() {
-		this.cancelLyricIndex();
-		// #ifdef H5
-		this.bgAudioMannager.destroy();
-		// #endif
+		this.cancelLyricIndex()
 	},
 	methods: {
 		playMusic(songId) {
 			Promise.all([songDetail(songId), songSimi(songId), songComment(songId), songLyric(songId), songUrl(
 				songId)]).then((res) => {
-					if (res[0][1].data.code == '200') {
-						this.songDetail = res[0][1].data.songs[0];
+					if (res[0].data.code == '200') {
+						this.songDetail = res[0].data.songs[0];
 						uni.setNavigationBarTitle({
 							title: this.songDetail.name
 						});
 					}
-					if (res[1][1].data.code == '200') {
-						this.songSimi = res[1][1].data.songs;
+					if (res[1].data.code == '200') {
+						this.songSimi = res[1].data.songs;
 					}
-					if (res[2][1].data.code == '200') {
-						this.songComment = res[2][1].data.hotComments;
+					if (res[2].data.code == '200') {
+						this.songComment = res[2].data.hotComments;
 					}
-					if (res[3][1].data.code == '200') {
-						let lyric = res[3][1].data.lrc.lyric;
+					if (res[3].data.code == '200') {
+						let lyric = res[3].data.lrc.lyric;
 						let result = [];
 						let re = /\[([^\]]+)\]([^[]+)/g;
 						lyric.replace(re, ($0, $1, $2) => {
@@ -126,24 +123,29 @@ export default {
 						});
 						this.songLyric = result;
 					}
-					if (res[4][1].data.code == '200') {
+					if (res[4].data.code == '200') {
 						this.listenLyricIndex();
 						this.bgAudioMannager = uni.getBackgroundAudioManager();
 						this.bgAudioMannager.title = this.songDetail.name;
-						this.bgAudioMannager.src = res[4][1].data.data[0].url;
+						this.bgAudioMannager.src = res[4].data.data[0].url;
 						this.bgAudioMannager.onPlay(() => {
+							this.listenLyricIndex();
 							this.iconType = 'pause-circle';
 							this.isplayrotate = true;
-							this.listenLyricIndex();
 						});
 						this.bgAudioMannager.onPause(() => {
+							this.cancelLyricIndex();
 							this.iconType = 'play-circle';
 							this.isplayrotate = false;
-							this.cancelLyricIndex();
 						});
 						this.bgAudioMannager.onEnded(() => {
 							this.playMusic(this.currentId)
 						});
+						this.bgAudioMannager.onStop(() => {
+							this.cancelLyricIndex();
+							this.iconType = 'play-circle';
+							this.isplayrotate = false;
+						})
 					}
 				});
 		},
@@ -182,7 +184,6 @@ export default {
 		}
 	},
 	onShareAppMessage() {
-		this.bgAudioMannager.pause();
 		return {
 			title: `分享音乐：${this.songDetail.name}`,
 			path: '/pages/detail/detail',

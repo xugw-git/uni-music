@@ -88,16 +88,18 @@ export default {
 	},
 	methods: {
 		handleToSearch() {
-			this.historyList.unshift(this.searchWord);
-			this.historyList = [...new Set(this.historyList)];
-			if (this.historyList.length > 10) {
-				this.historyList.length = 10;
+			if (this.searchWord) {
+				this.historyList.unshift(this.searchWord);
+				this.historyList = [...new Set(this.historyList)];
+				if (this.historyList.length > 10) {
+					this.historyList.length = 10;
+				}
+				uni.setStorage({
+					key: 'searchHistory',
+					data: this.historyList
+				});
+				this.getSearchList(this.searchWord);
 			}
-			uni.setStorage({
-				key: 'searchHistory',
-				data: this.historyList
-			});
-			this.getSearchList(this.searchWord);
 		},
 		handleToClear() {
 			uni.removeStorage({

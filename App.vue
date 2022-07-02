@@ -1,11 +1,12 @@
 <script>
 export default {
-	onLaunch: function () {
+	onLaunch() {
+		wx.cloud.init({
+			env: 'prod-9glkq86u6ab52840'
+		})
 	},
-	onShow: function () {
-	},
-	onHide: function () {
-	}
+	onShow: function () { },
+	onHide: function () { }
 }
 </script>
 
